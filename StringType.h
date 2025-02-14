@@ -8,33 +8,65 @@ class StringType
 {
 public:
     /// <summary>
-    /// Конструктор по умолчанию, что бы поведение совпадало с std::string
+    /// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РёР· C-СЃС‚СЂРѕРєРё (const char*)
+    /// </summary>
+    StringType(const char* val) : value(std::string(val)) {}
+    /// <summary>
+    /// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РёР· char (СЃРѕР·РґР°РµС‚ СЃС‚СЂРѕРєСѓ РёР· РѕРґРЅРѕРіРѕ СЃРёРјРІРѕР»Р°)
+    /// </summary>
+    StringType(char ch) : value(std::string(1, ch)) {}
+    /// <summary>
+    /// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ, С‡С‚Рѕ Р±С‹ РїРѕРІРµРґРµРЅРёРµ СЃРѕРІРїР°РґР°Р»Рѕ СЃ std::string
     /// </summary>
     StringType() : value("") {}
     /// <summary>
-    /// Конструктор с параметром
+    /// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ СЃ РїР°СЂР°РјРµС‚СЂРѕРј
     /// </summary>
-    /// <param name="val">Строковое значение для инициализации</param>
+    /// <param name="val">РЎС‚СЂРѕРєРѕРІРѕРµ Р·РЅР°С‡РµРЅРёРµ РґР»СЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё</param>
     StringType(std::string val) : value(std::move(val)) {}
     /// <summary>
-    /// Сериализует объект и добавляет его бинарное представление в буфер
+    /// РћРїРµСЂР°С‚РѕСЂ РїСЂРёСЃРІР°РёРІР°РЅРёСЏ РёР· const char*
     /// </summary>
-    /// <param name="buffer">Буфер, в который записываются сериализованные данные</param>
+    StringType& operator=(const char* val) 
+    {
+        value = std::string(val);
+        return *this;
+    }
+    /// <summary>
+    /// РћРїРµСЂР°С‚РѕСЂ РїСЂРёСЃРІР°РёРІР°РЅРёСЏ РёР· char
+    /// </summary>
+    StringType& operator=(char ch) 
+    {
+        value = std::string(1, ch);
+        return *this;
+    }
+    /// <summary>
+    /// РћРїРµСЂР°С‚РѕСЂ РїСЂРёСЃРІР°РёРІР°РЅРёСЏ РёР· std::string
+    /// </summary>
+    StringType& operator=(const std::string& val) 
+    {
+        value = val;
+        return *this;
+    }
+    /// <summary>
+    /// РЎРµСЂРёР°Р»РёР·СѓРµС‚ РѕР±СЉРµРєС‚ Рё РґРѕР±Р°РІР»СЏРµС‚ РµРіРѕ Р±РёРЅР°СЂРЅРѕРµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ РІ Р±СѓС„РµСЂ
+    /// </summary>
+    /// <param name="buffer">Р‘СѓС„РµСЂ, РІ РєРѕС‚РѕСЂС‹Р№ Р·Р°РїРёСЃС‹РІР°СЋС‚СЃСЏ СЃРµСЂРёР°Р»РёР·РѕРІР°РЅРЅС‹Рµ РґР°РЅРЅС‹Рµ</param>
     void serialize(Buffer& buffer) const;
     /// <summary>
-    /// Десериализует объект из буфера
+    /// Р”РµСЃРµСЂРёР°Р»РёР·СѓРµС‚ РѕР±СЉРµРєС‚ РёР· Р±СѓС„РµСЂР°
     /// </summary>
-    /// <param name="it">Итератор на начало данных в буфере</param>
-    /// <param name="end">Итератор на конец буфера</param>
-    /// <returns>Итератор на позицию после прочитанных данных</returns>
+    /// <param name="it">РС‚РµСЂР°С‚РѕСЂ РЅР° РЅР°С‡Р°Р»Рѕ РґР°РЅРЅС‹С… РІ Р±СѓС„РµСЂРµ</param>
+    /// <param name="end">РС‚РµСЂР°С‚РѕСЂ РЅР° РєРѕРЅРµС† Р±СѓС„РµСЂР°</param>
+    /// <returns>РС‚РµСЂР°С‚РѕСЂ РЅР° РїРѕР·РёС†РёСЋ РїРѕСЃР»Рµ РїСЂРѕС‡РёС‚Р°РЅРЅС‹С… РґР°РЅРЅС‹С…</returns>
     Buffer::const_iterator deserialize(Buffer::const_iterator it, Buffer::const_iterator end);
 private:
     /// <summary>
-    /// Хранимое строковое значение
+    /// РҐСЂР°РЅРёРјРѕРµ СЃС‚СЂРѕРєРѕРІРѕРµ Р·РЅР°С‡РµРЅРёРµ
     /// </summary>
     Helpers::GenEntity value;
     /// <summary>
-    /// Этот класс является другом для класса HelpersSerialize
+    /// Р­С‚РѕС‚ РєР»Р°СЃСЃ СЏРІР»СЏРµС‚СЃСЏ РґСЂСѓРіРѕРј РґР»СЏ РєР»Р°СЃСЃР° HelpersSerialize
     /// </summary>
     friend class HelpersSerialize;
 };
